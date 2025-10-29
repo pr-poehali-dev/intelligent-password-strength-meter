@@ -19,12 +19,19 @@ interface PasswordAnalysis {
     commonWord: boolean;
   };
   timeToHack: string;
+  breachInfo?: {
+    compromised: boolean;
+    breach_count?: number;
+    severity?: string;
+    message?: string;
+  };
 }
 
 const Index = () => {
   const [password, setPassword] = useState('');
   const [analysis, setAnalysis] = useState<PasswordAnalysis | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [checking, setChecking] = useState(false);
 
   const analyzePassword = (pwd: string): PasswordAnalysis => {
     const checks = {
@@ -112,9 +119,53 @@ const Index = () => {
     return { score, level, feedback, checks, timeToHack };
   };
 
+  const checkBreaches = async (pwd: string) => {
+    if (!pwd || pwd.length < 4) return null;
+    
+    try {
+      const response = await fetch('https://functions.poehali.dev/9a995e1c-5de4-47cc-82ab-2ff77c99888c', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: pwd })
+      });
+      
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.error('Breach check error:', error);
+    }
+    return null;
+  };
+
   useEffect(() => {
-    const result = analyzePassword(password);
-    setAnalysis(result);
+    const checkPassword = async () => {
+      setChecking(true);
+      const result = analyzePassword(password);
+      
+      const breachInfo = await checkBreaches(password);
+      if (breachInfo) {
+        result.breachInfo = breachInfo;
+        
+        if (breachInfo.compromised) {
+          result.score = Math.max(0, result.score - 30);
+          result.feedback.unshift(`⚠️ ${breachInfo.message}`);
+          
+          if (result.score < 30) {
+            result.level = 'weak';
+          } else if (result.score < 60) {
+            result.level = 'medium';
+          }
+        }
+      }
+      
+      setAnalysis(result);
+      setChecking(false);
+    };
+    
+    checkPassword();
   }, [password]);
 
   const getLevelColor = (level: string) => {
@@ -225,20 +276,28 @@ const Index = () => {
               <CardDescription>Введите пароль для проверки его надёжности</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="relative">
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Введите ваш пароль..."
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="text-lg h-14 bg-background/50 border-primary/30 focus:border-primary pr-12"
-                />
-                <button
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <Icon name={showPassword ? 'EyeOff' : 'Eye'} size={20} />
-                </button>
+              <div className="space-y-2">
+                <div className="relative">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Введите ваш пароль..."
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="text-lg h-14 bg-background/50 border-primary/30 focus:border-primary pr-12"
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <Icon name={showPassword ? 'EyeOff' : 'Eye'} size={20} />
+                  </button>
+                </div>
+                {checking && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Icon name="Shield" className="animate-pulse" size={14} />
+                    <span>Проверка по базе утечек данных...</span>
+                  </div>
+                )}
               </div>
 
               {analysis && password && (
@@ -257,6 +316,22 @@ const Index = () => {
                       />
                     </div>
                   </div>
+
+                  {analysis.breachInfo?.compromised && (
+                    <Card className="bg-red-950/30 border-red-500/30">
+                      <CardContent className="pt-6">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Icon name="AlertTriangle" className="text-red-500" size={24} />
+                          <div>
+                            <h3 className="font-bold text-red-500">КРИТИЧЕСКАЯ УГРОЗА</h3>
+                            <p className="text-sm text-red-400">
+                              Найдено в {analysis.breachInfo.breach_count} утечках данных
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
 
                   <Card className="bg-background/30 border-primary/10">
                     <CardContent className="pt-6">
