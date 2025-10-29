@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+
 import { Badge } from '@/components/ui/badge';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 import Icon from '@/components/ui/icon';
 
 interface PasswordAnalysis {
@@ -195,87 +195,26 @@ const Index = () => {
     return 'bg-secondary';
   };
 
-  const faqs = [
-    {
-      question: 'Почему длина пароля так важна?',
-      answer: 'Длина пароля экспоненциально увеличивает время взлома. Пароль из 8 символов можно взломать за часы, а из 16 символов — за тысячи лет при использовании современных методов брутфорса.'
-    },
-    {
-      question: 'Что такое радужные таблицы?',
-      answer: 'Радужные таблицы — это предвычисленные хеши распространённых паролей. Использование уникальных паролей с солью (случайными данными) делает эти таблицы бесполезными.'
-    },
-    {
-      question: 'Безопасно ли использовать менеджеры паролей?',
-      answer: 'Да, современные менеджеры паролей используют end-to-end шифрование. Они позволяют использовать уникальные сложные пароли для каждого сервиса, что намного безопаснее повторного использования простых паролей.'
-    },
-    {
-      question: 'Как часто нужно менять пароли?',
-      answer: 'Современные рекомендации NIST предлагают менять пароли только при подозрении на компрометацию. Частая смена заставляет использовать более простые пароли, что снижает безопасность.'
-    },
-    {
-      question: 'Что такое двухфакторная аутентификация (2FA)?',
-      answer: '2FA добавляет второй уровень защиты помимо пароля — обычно это одноразовый код из приложения или SMS. Даже если пароль скомпрометирован, злоумышленник не сможет войти без второго фактора.'
-    }
-  ];
 
-  const tips = [
-    {
-      icon: 'Shield',
-      title: 'Используйте парольные фразы',
-      description: 'Комбинация из 4-5 случайных слов (например, "Космос-Кофе-Гитара-Закат") легко запоминается и очень надёжна.',
-      example: 'МолнияОблакоКлавиатура2024!'
-    },
-    {
-      icon: 'RefreshCw',
-      title: 'Уникальный пароль для каждого сайта',
-      description: 'Утечка одного пароля не должна компрометировать все ваши аккаунты. Используйте менеджеры паролей.',
-      example: 'Gmail: Sf9$kL@Zx2!Pm\nFacebook: 7nQ#vR@8pW$Lk'
-    },
-    {
-      icon: 'Lock',
-      title: 'Комбинируйте разные типы символов',
-      description: 'Смешивайте заглавные, строчные буквы, цифры и специальные символы для максимальной стойкости.',
-      example: 'Tr0ub4dor&3 или c0rrect-h0rse-battery-staple!'
-    },
-    {
-      icon: 'AlertTriangle',
-      title: 'Избегайте очевидных замен',
-      description: 'Замены типа @ вместо a или 3 вместо e легко предсказуемы для алгоритмов взлома.',
-      example: '❌ P@ssw0rd → ✅ 8jK#mQ2!xL@9'
-    }
-  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-card overflow-hidden relative">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10 container mx-auto px-4 py-12">
-        <header className="text-center mb-16 animate-fade-in">
-          <div className="inline-block mb-4">
-            <Icon name="Lock" size={64} className="text-primary neon-text" />
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl">
+        <header className="text-center mb-12">
+          <div className="inline-block mb-6">
+            <Icon name="Shield" size={48} className="text-primary" />
           </div>
-          <h1 className="text-6xl font-bold mb-4 neon-text text-primary glitch">
-            PASSWORD SHIELD
+          <h1 className="text-4xl font-bold mb-2 text-foreground">
+            Password Strength
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Интеллектуальный анализатор стойкости паролей с ML-алгоритмами защиты
+          <p className="text-sm text-muted-foreground">
+            Проверка стойкости пароля
           </p>
         </header>
 
-        <div className="max-w-4xl mx-auto mb-16">
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-xl neon-border animate-scale-in">
-            <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-3">
-                <Icon name="Scan" className="text-primary" />
-                Анализ пароля
-              </CardTitle>
-              <CardDescription>Введите пароль для проверки его надёжности</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <div className="mb-8">
+          <Card className="border-border/50 bg-card shadow-lg">
+            <CardContent className="pt-6 space-y-6">
               <div className="space-y-2">
                 <div className="relative">
                   <Input
@@ -302,14 +241,17 @@ const Index = () => {
 
               {analysis && password && (
                 <div className="space-y-6 animate-fade-in">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Уровень стойкости</span>
-                      <Badge className={`${getLevelColor(analysis.level)} neon-text text-base font-bold`}>
-                        {getLevelText(analysis.level)} — {analysis.score}%
-                      </Badge>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Стойкость</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl font-bold">{analysis.score}%</span>
+                        <Badge variant="outline" className={getLevelColor(analysis.level)}>
+                          {getLevelText(analysis.level)}
+                        </Badge>
+                      </div>
                     </div>
-                    <div className="relative h-4 bg-muted rounded-full overflow-hidden">
+                    <div className="relative h-2 bg-muted rounded-full overflow-hidden">
                       <div
                         className={`h-full transition-all duration-500 ${getProgressColor(analysis.score)}`}
                         style={{ width: `${analysis.score}%` }}
@@ -318,121 +260,64 @@ const Index = () => {
                   </div>
 
                   {analysis.breachInfo?.compromised && (
-                    <Card className="bg-red-950/30 border-red-500/30">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center gap-3 mb-2">
-                          <Icon name="AlertTriangle" className="text-red-500" size={24} />
-                          <div>
-                            <h3 className="font-bold text-red-500">КРИТИЧЕСКАЯ УГРОЗА</h3>
-                            <p className="text-sm text-red-400">
-                              Найдено в {analysis.breachInfo.breach_count} утечках данных
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                      <Icon name="AlertTriangle" className="text-destructive" size={20} />
+                      <div>
+                        <p className="text-sm font-medium text-destructive">
+                          Найдено в {analysis.breachInfo.breach_count} утечках
+                        </p>
+                      </div>
+                    </div>
                   )}
 
-                  <Card className="bg-background/30 border-primary/10">
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-4">
-                        <Icon name="Timer" className="text-accent" />
-                        <span className="font-semibold">Время взлома: {analysis.timeToHack}</span>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                        {Object.entries(analysis.checks).map(([key, value]) => (
-                          <div
-                            key={key}
-                            className={`flex items-center gap-2 p-2 rounded ${
-                              value ? 'bg-primary/10 text-primary' : 'bg-muted/30 text-muted-foreground'
-                            }`}
-                          >
-                            <Icon name={value ? 'CheckCircle2' : 'XCircle'} size={18} />
-                            <span className="text-sm">
-                              {key === 'length' && '12+ символов'}
-                              {key === 'uppercase' && 'Заглавные'}
-                              {key === 'lowercase' && 'Строчные'}
-                              {key === 'numbers' && 'Цифры'}
-                              {key === 'special' && 'Спецсимволы'}
-                              {key === 'commonWord' && 'Уникальность'}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Icon name="Clock" size={16} />
+                      <span>Время взлома: <strong className="text-foreground">{analysis.timeToHack}</strong></span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {Object.entries(analysis.checks).map(([key, value]) => (
+                        <div
+                          key={key}
+                          className={`flex items-center gap-2 p-3 rounded-lg border ${
+                            value ? 'bg-primary/5 border-primary/20 text-primary' : 'bg-muted/20 border-muted text-muted-foreground'
+                          }`}
+                        >
+                          <Icon name={value ? 'Check' : 'X'} size={16} />
+                          <span className="text-xs">
+                            {key === 'length' && '12+ символов'}
+                            {key === 'uppercase' && 'Заглавные'}
+                            {key === 'lowercase' && 'Строчные'}
+                            {key === 'numbers' && 'Цифры'}
+                            {key === 'special' && 'Спецсимволы'}
+                            {key === 'commonWord' && 'Уникальность'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
 
-                      <div className="space-y-2">
+                    {analysis.feedback.length > 0 && (
+                      <div className="space-y-1 pt-2 border-t">
                         {analysis.feedback.map((item, index) => (
-                          <div key={index} className="flex items-start gap-2 text-sm">
-                            <Icon name="Info" size={16} className="text-accent mt-0.5" />
+                          <div key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                            <span>•</span>
                             <span>{item}</span>
                           </div>
                         ))}
                       </div>
-                    </CardContent>
-                  </Card>
+                    )}
+                  </div>
                 </div>
               )}
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
-          <Card className="border-secondary/20 bg-card/50 backdrop-blur-xl animate-fade-in">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3">
-                <Icon name="HelpCircle" className="text-secondary" />
-                Вопросы и ответы
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`faq-${index}`}>
-                    <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
 
-          <Card className="border-accent/20 bg-card/50 backdrop-blur-xl animate-fade-in">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3">
-                <Icon name="Lightbulb" className="text-accent" />
-                Советы по безопасности
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {tips.map((tip, index) => (
-                <div key={index} className="p-4 bg-background/30 rounded-lg border border-primary/10 hover:border-accent/30 transition-all">
-                  <div className="flex items-start gap-3 mb-2">
-                    <Icon name={tip.icon as any} className="text-accent mt-1" size={20} />
-                    <div>
-                      <h4 className="font-semibold mb-1">{tip.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-2">{tip.description}</p>
-                      <code className="text-xs bg-muted/30 px-2 py-1 rounded block overflow-x-auto">
-                        {tip.example}
-                      </code>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
 
-        <footer className="text-center text-muted-foreground text-sm">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Icon name="Shield" size={16} className="text-primary" />
-            <span>Защита данных — ваша ответственность</span>
-          </div>
-          <p>Все проверки выполняются локально в вашем браузере</p>
+        <footer className="text-center text-muted-foreground text-xs mt-8">
+          <p>Проверка выполняется локально в браузере</p>
         </footer>
       </div>
     </div>
