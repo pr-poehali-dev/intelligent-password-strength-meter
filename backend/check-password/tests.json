@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "Check non-compromised password",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "password": "SuperSecureP@ssw0rd!2024XYZ"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "compromised": false
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Missing password field",
+      "method": "POST",
+      "path": "/",
+      "body": {},
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}
