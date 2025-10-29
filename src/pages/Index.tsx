@@ -202,18 +202,18 @@ const Index = () => {
       <div className="w-full max-w-2xl">
         <header className="text-center mb-12">
           <div className="inline-block mb-6">
-            <Icon name="Shield" size={48} className="text-primary" />
+            <Icon name="Shield" size={48} className="text-primary glow-text" />
           </div>
-          <h1 className="text-4xl font-bold mb-2 text-foreground">
-            Password Strength
+          <h1 className="text-5xl font-bold mb-2 text-primary glow-text">
+            PASSWORD SHIELD
           </h1>
           <p className="text-sm text-muted-foreground">
-            Проверка стойкости пароля
+            Проверка стойкости пароля с ML-анализом
           </p>
         </header>
 
         <div className="mb-8">
-          <Card className="border-border/50 bg-card shadow-lg">
+          <Card className="border-primary/30 bg-card/50 backdrop-blur-xl glow">
             <CardContent className="pt-6 space-y-6">
               <div className="space-y-2">
                 <div className="relative">
@@ -222,7 +222,7 @@ const Index = () => {
                     placeholder="Введите ваш пароль..."
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="text-lg h-14 bg-background/50 border-primary/30 focus:border-primary pr-12"
+                    className="text-lg h-14 bg-background/50 border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/20 pr-12"
                   />
                   <button
                     onClick={() => setShowPassword(!showPassword)}
@@ -245,8 +245,8 @@ const Index = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Стойкость</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl font-bold">{analysis.score}%</span>
-                        <Badge variant="outline" className={getLevelColor(analysis.level)}>
+                        <span className="text-2xl font-bold glow-text">{analysis.score}%</span>
+                        <Badge variant="outline" className={`${getLevelColor(analysis.level)} glow-text`}>
                           {getLevelText(analysis.level)}
                         </Badge>
                       </div>
@@ -317,7 +317,10 @@ const Index = () => {
 
 
         <footer className="text-center text-muted-foreground text-xs mt-8">
-          <p>Проверка выполняется локально в браузере</p>
+          <div className="flex items-center justify-center gap-2">
+            <Icon name="Lock" size={12} className="text-primary/50" />
+            <p>Проверка выполняется локально в браузере</p>
+          </div>
         </footer>
       </div>
     </div>
